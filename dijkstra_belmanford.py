@@ -72,8 +72,7 @@ def caminho_minimo_auto(grafo, origem):
         return dist, pred, 'bellman-ford'
     else:
         dist, pred = djkstra(grafo, origem)
-    
-    return dist, pred, 'djkstra'
+        return dist, pred, 'djkstra'
 
 def caminho_minimo(pred, origem, destino):
     caminho = []
@@ -118,14 +117,13 @@ def escolher_movimento_ladrao(grafo, pos_atual, portos, pos_policiais):
     melhor_custo = float('inf')
     
     for v, peso in vizinhos_livres:
-        if v in pos_policiais:
-            continue  # Evita vizinhos onde há policiais
         
         #calcula caminhos a partir do vizinho
         dist, pred, _ = caminho_minimo_auto(grafo, v)
         
         for porto in portos:
-            if dist[porto] < melhor_custo:
-                melhor_custo = dist[porto]
+            custo_total = peso + dist[porto]  # Custo do movimento atual + custo do caminho até o porto
+            if custo_total < melhor_custo:
+                melhor_custo = custo_total
                 melhor_vizinho = v
     return melhor_vizinho if melhor_vizinho is not None else vizinhos_livres[0][0]  # Retorna o melhor vizinho ou o primeiro disponível
