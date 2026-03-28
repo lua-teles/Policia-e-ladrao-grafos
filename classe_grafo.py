@@ -59,5 +59,9 @@ def ler_arquivo(caminho):
     pos_policiais = [int(p) for p in partes[1:]]
     
     return grafo, vertice_roubo, portos, num_policiais, pos_policiais
+
+def imprimir_grafo(grafo, vertice_roubo, portos, pos_policiais):
+    #Imprime a estrutura do grafo
+    print(grafo)
             
           

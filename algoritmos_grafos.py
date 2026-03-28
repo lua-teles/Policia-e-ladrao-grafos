@@ -1,4 +1,54 @@
 import heapq
+import math
+
+def floyd_warshall(grafo):
+    INF = float('inf')
+    vertices = list(grafo.adjacency_list.keys())
+    n = grafo.num_vertices
+    
+    # inicializando a matriz de distâncias e predecessores
+    c = [[math.inf] * n for _ in range(n)]
+    pred = [[None] * n for _ in range(n)]
+
+    # distância zero para ele mesmo
+    for i in range(n):
+        c[i][i] = 0
+
+    # colocando os pesos das arestas
+    for u in range(n):
+        for v, peso in grafo.vizinhos(u):
+            c[u][v] = peso
+            pred[u][v] = u
+    
+    # floyd warshall
+    for k in vertices:
+        for i in vertices:
+            for j in vertices:
+                if c[i][j] > c[i][k] + c[k][j]:
+                    c[i][j] = c[i][k] + c[k][j]
+    
+    return c
+
+def caminho_total(pred, origem, destino):
+    # não tem caminho
+    if pred[origem][destino] is None:
+        return []
+    
+    caminho = []
+    atual = destino
+
+    # fazendo o caminho com os predecessores
+    while (atual != origem):
+        caminho.append(atual)
+        atual = pred[origem][atual]
+        if atual is None:
+            return None
+    
+    # colocando a origem
+    caminho.append(origem)
+    caminho.reverse()
+    return caminho
+
 
 def djkstra(grafo, origem):
     INF = float('inf')
@@ -98,7 +148,6 @@ def obter_caminho_lista(pred, destino):
     caminho.reverse()
     
     return caminho
-
 
 def escolher_movimento_ladrao(grafo, pos_atual, portos, pos_policiais):
     
