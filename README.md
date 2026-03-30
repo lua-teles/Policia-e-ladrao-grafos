@@ -1,17 +1,17 @@
 # Sistema de Captura do Ladrao
 
-Implementacao em Python 3.10+ da simulacao de perseguicao em grafo direcionado e ponderado.
+Implementacao em Python 3.10+ da simulação de perseguição em grafo direcionado e ponderado.
 
 ## Estrutura
 
-- `main.py`: orquestra leitura, validacoes, min-cut, simulacao, replanejamento e relatorio
-- `grafo.py`: estrutura do grafo e parser de entrada
-- `algoritmos.py`: Bellman-Ford, BFS, Edmonds-Karp e extracao de vertices do corte
-- `simulacao.py`: logica rodada a rodada
-- `relatorio.py`: formatacao e escrita do relatorio final
-- `entrada.txt`: exemplo padrao de entrada
-- `saida.txt`: saida gerada no exemplo padrao
-- `casos_teste/`: cenarios para analise experimental e validacao
+- `main.py`: orquestra leitura, validações, min-cut, simulação, replanejamento e relatório;
+- `grafo.py`: estrutura do grafo e parser de entrada;
+- `algoritmos.py`: Bellman-Ford, BFS, Edmonds-Karp e extração de vértices do corte;
+- `simulacao.py`: lógica rodada a rodada;
+- `relatorio.py`: formatação e escrita do relatório final;
+- `entrada.txt`: exemplo padrão de entrada;
+- `saida.txt`: saída gerada no exemplo padrão;
+- `casos_teste/`: cenários para análise experimental e validação.
 
 ## Como executar
 
@@ -47,11 +47,11 @@ q pos1 pos2 ... posq
 ## Escolhas de projeto
 
 - Bellman-Ford foi escolhido porque o problema permite pesos negativos.
-- O grafo reverso permite calcular distancias para todas as equipes com uma unica execucao por rodada.
+- O grafo reverso permite calcular distâncias para todas as equipes com uma única execução por rodada.
 - O min-cut usa vertex split e Edmonds-Karp com matriz de capacidades.
 - Se a tentativa com as equipes iniciais falhar, o programa tenta reposicionar equipes no corte minimo.
 
-## Cenarios de teste sugeridos
+## Cenários de teste sugeridos
 
 ```bash
 cd projeto
@@ -69,16 +69,16 @@ python main.py casos_teste/11_fuga_e_replanejamento.txt
 
 Esses arquivos ajudam a cobrir o requisito de analise para:
 
-- equipes insuficientes
-- numero exato de equipes minimas teoricas
-- equipes acima do minimo
-- caso explicito de fuga (status ESCAPOU)
-- ausencia de porto alcancavel a partir do castelo
-- deteccao de ciclo negativo alcancavel (entrada invalida)
-- rejeicao de entrada invalida em que castelo e porto coincidem
-- interceptacao apos multiplas avaliacoes de rota
-- perseguicao com mais equipes e mais profundidade no grafo
-- fuga longa com replanejamento automatico no corte minimo
+- equipes insuficientes;
+- número exato de equipes mínimas teóricas;
+- equipes acima do mínimo;
+- caso explícito de fuga (status ESCAPOU);
+- ausência de porto alcançável a partir do castelo;
+- detecção de ciclo negativo alcançável (entrada inválida);
+- rejeição de entrada inválida em que castelo e porto coincidem;
+- interceptação após múltiplas avaliações de rota;
+- perseguição com mais equipes e mais profundidade no grafo;
+- fuga longa com replanejamento automático no corte mínimo.
 
 ## Material de entrega
 
