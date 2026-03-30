@@ -92,6 +92,8 @@ Separação clara de responsabilidades e baixo acoplamento entre módulos.
 
 - Geração de relatório mesmo quando não há porto alcançável.
 - Segunda tentativa automática com reposicionamento no corte mínimo quando a estratégia inicial falha.
+- Animação GIF gerada automaticamente ao rodar main.py.
+- Relatório salvo em saida.txt automaticamente ao rodar main.py.
 
 ## 4. Análise dos Resultados (20%)
 
@@ -105,6 +107,9 @@ Comandos reproduzíveis:
 - python main.py casos_teste/04_escapou.txt casos_teste/04_saida_resultado.txt
 - python main.py casos_teste/06_sem_porto_alcancavel.txt casos_teste/06_saida.txt
 - python main.py casos_teste/07_ciclo_negativo.txt casos_teste/07_saida.txt
+
+Também é possível rodar sem argumentos — nesse caso o programa usa entrada.txt por padrão e gera saida.txt e animacao.gif automaticamente:
+- python main.py
 
 ### 4.2 Síntese observada
 
@@ -135,6 +140,8 @@ Conclusão: Min-Cut é referência estrutural, enquanto a simulação captura co
 - [ ] Sem bibliotecas externas de grafos.
 - [ ] Bellman-Ford, BFS e Edmonds-Karp implementados manualmente.
 - [ ] Relatório de saída é gerado para cenários válidos e para caso sem porto alcançável.
+- [ ] Relatório salvo automaticamente em saida.txt ao rodar main.py.
+- [ ] Animação GIF gerada automaticamente em animacao.gif ao rodar main.py.
 - [ ] Cenários de teste incluem insuficientes, exato k, acima de k e fuga.
 - [ ] Caso de ciclo negativo demonstrado como inválido.
 - [ ] Discussão de corretude, eficiência e trade-offs incluída na entrega.
@@ -144,3 +151,4 @@ Conclusão: Min-Cut é referência estrutural, enquanto a simulação captura co
 - Documento principal de execução: [projeto/README.md](projeto/README.md)
 - Relatório gerado no caso padrão: [projeto/saida.txt](projeto/saida.txt)
 - Pasta de cenários: [projeto/casos_teste](projeto/casos_teste)
+- Animação gerada no caso padrão: [projeto/animacao.gif](projeto/animacao.gif)
