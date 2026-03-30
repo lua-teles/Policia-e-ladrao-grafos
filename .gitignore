@@ -1,2 +1,7 @@
-__pycache__/classe_grafo.cpython-314.pyc
-__pycache__/dijkstra_belmanford.cpython-314.pyc
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+saida.txt
+casos_teste/*_saida*.txt
+simulacao.py
