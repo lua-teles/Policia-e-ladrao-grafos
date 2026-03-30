@@ -34,11 +34,11 @@ python main.py entrada.txt saida.txt
 Da raiz do repositório:
 
 ```bash
-python projeto/main.py projeto/entrada.txt
-python projeto/main.py projeto/entrada.txt projeto/saida.txt
+python ./main.py ./entrada.txt
+python ./main.py ./entrada.txt ./saida.txt
 ```
 
-Dentro da pasta `projeto/`:
+Dentro da pasta `./`:
 
 ```bash
 python main.py entrada.txt
@@ -50,13 +50,13 @@ python main.py entrada.txt saida.txt
 ## Formato da entrada
 
 ```text
-n m
-u1 v1 w1
-u2 v2 w2
+(numero de vertices) (numero de arestas)
+(vertice1) (vertice2) (peso)
+(vertice3) (vertice4) (peso)
 ...
-castelo
-k porto1 porto2 ... portok
-q pos1 pos2 ... posq
+(castelo)
+(quantidade portos) (porto1) (porto2) ... (portok)
+(quantidade policiais) (posicao1) (posicao2) ... (posicaoq)
 ```
 
 ## Escolhas de projeto
