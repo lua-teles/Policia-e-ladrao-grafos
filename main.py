@@ -176,14 +176,21 @@ def main(caminho_entrada: str, caminho_saida: str | None = None) -> int:
             res_final = res_replanejado
 
     gerar_relatorio(res_final, k_minimo, corte, len(equipes), caminho_saida)
-
+    try:
+        from visualizacao import gerar_animacao
+        gerar_animacao(caminho_entrada, "animacao.gif")
+    except Exception as exc:
+        print(f"Aviso: animacao nao gerada ({exc})")
+        
     return 0
 
 
 if __name__ == "__main__":
     if len(sys.argv) not in {2, 3}:
-        print("Uso: python main.py <entrada.txt> [saida.txt]")
-        raise SystemExit(1)
+        caminho_entrada = "entrada.txt"
+        caminho_saida = "saida.txt"
+    else:
+        caminho_entrada = sys.argv[1]
+        caminho_saida = sys.argv[2] if len(sys.argv) == 3 else None
 
-    caminho_saida = sys.argv[2] if len(sys.argv) == 3 else None
-    raise SystemExit(main(sys.argv[1], caminho_saida))
+    raise SystemExit(main(caminho_entrada, caminho_saida))
