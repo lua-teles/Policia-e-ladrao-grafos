@@ -1,178 +1,230 @@
-import heapq
-import math
+"""Algoritmos de caminho minimo, conectividade e fluxo maximo/min-cut."""
 
-def floyd_warshall(grafo):
-    INF = float('inf')
-    vertices = list(grafo.adjacency_list.keys())
-    n = grafo.num_vertices
-    
-    # inicializando a matriz de distâncias e predecessores
-    c = [[math.inf] * n for _ in range(n)]
-    pred = [[None] * n for _ in range(n)]
+from __future__ import annotations
 
-    # distância zero para ele mesmo
-    for i in range(n):
-        c[i][i] = 0
+from collections import deque
 
-    # colocando os pesos das arestas
-    for u in range(n):
-        for v, peso in grafo.vizinhos(u):
-            c[u][v] = peso
-            pred[u][v] = u
-    
-    # floyd warshall
-    for k in vertices:
-        for i in vertices:
-            for j in vertices:
-                if c[i][j] > c[i][k] + c[k][j]:
-                    c[i][j] = c[i][k] + c[k][j]
-    
-    return c
-
-def caminho_total(pred, origem, destino):
-    # não tem caminho
-    if pred[origem][destino] is None:
-        return []
-    
-    caminho = []
-    atual = destino
-
-    # fazendo o caminho com os predecessores
-    while (atual != origem):
-        caminho.append(atual)
-        atual = pred[origem][atual]
-        if atual is None:
-            return None
-    
-    # colocando a origem
-    caminho.append(origem)
-    caminho.reverse()
-    return caminho
+INF = float("inf")
+CAP_INF = 10**9
 
 
-def djkstra(grafo, origem):
-    INF = float('inf')
-    dist = {v: INF for v in grafo.adj}
-    pred = {v: None for v in grafo.adj}
-    dist[origem] = 0
-    
-    #Fila de Prioridade: (custo_acumulado, vertice)
-    heap = [(0, origem)]
-    while heap:
-        custo_atual, u = heapq.heappop(heap)
-        
-        # Se o custo atual for maior que a distância registrada, ignore
-        if custo_atual > dist[u]:
-            continue
-        
-        for v, peso in grafo.vizinhos(u):
-            custo_novo = dist[u] + peso
-            
-            if custo_novo < dist[v]:
-                dist[v] = custo_novo
-                pred[v] = u
-                heapq.heappush(heap, (custo_novo, v))
-                
-    return dist, pred
+def bellman_ford(
+    adj: list[list[tuple[int, float]]],
+    n: int,
+    fonte: int,
+    bloqueados: set[int] | None = None,
+) -> tuple[list[float], list[int]]:
+    bloqueados = bloqueados or set()
+    dist = [INF] * n
+    pred = [-1] * n
+    dist[fonte] = 0.0
 
-def bellman_ford(grafo, origem):
-    INF = float('inf')
-    dist = {v: INF for v in grafo.adj}
-    pred = {v: None for v in grafo.adj}
-    dist[origem] = 0
-    
-    n = grafo.num_vertices
-    
-    #Relaxamento das arestas (v-1) vezes
     for _ in range(n - 1):
         atualizado = False
-        for u in grafo.adj:
+        for u in range(n):
             if dist[u] == INF:
-                continue # Se o vértice u não é alcançável, pule
-            for v, peso in grafo.vizinhos(u):
-                if dist[u] + peso < dist[v]:
-                    dist[v] = dist[u] + peso
+                continue
+            if u in bloqueados and u != fonte:
+                continue
+            base = dist[u]
+            for v, w in adj[u]:
+                if v in bloqueados:
+                    continue
+                nd = base + w
+                if nd < dist[v]:
+                    dist[v] = nd
                     pred[v] = u
                     atualizado = True
         if not atualizado:
-            break # Se não houve atualização, podemos parar
-        
-    # Verificação de ciclo negativo
-    detectado_ciclo_negativo = False
-    for u in grafo.adj:
-        if dist[u] == INF:
-            continue # Se o vértice u não é alcançável, pule
-        for v, peso in grafo.vizinhos(u):
-            if dist[u] + peso < dist[v]:
-                detectado_ciclo_negativo = True
-                break
-    return dist, pred, detectado_ciclo_negativo
+            break
 
-def tem_pesos_negativos(grafo):
-    """Verifica se o grafo possui arestas com pesos negativos"""
-    for u in grafo.adj:
-        for _, peso in grafo.vizinhos(u):
-            if peso < 0:
+    return dist, pred
+
+
+def tem_ciclo_negativo(
+    adj: list[list[tuple[int, float]]],
+    n: int,
+    fonte: int,
+) -> bool:
+    dist, _ = bellman_ford(adj, n, fonte)
+    for u in range(n):
+        if dist[u] == INF:
+            continue
+        for v, w in adj[u]:
+            if dist[u] + w < dist[v]:
                 return True
     return False
 
-def caminho_minimo_auto(grafo, origem):
-    if tem_pesos_negativos(grafo):
-        dist, pred, _ = bellman_ford(grafo, origem)
-        return dist, pred, 'bellman-ford'
-    else:
-        dist, pred = djkstra(grafo, origem)
-        return dist, pred, 'djkstra'
 
-def caminho_minimo(pred, origem, destino):
+def tem_ciclo_negativo_global(
+    adj: list[list[tuple[int, float]]],
+    n: int,
+) -> bool:
+    # Equivale a adicionar uma superfonte com arestas de peso 0 para todos os vértices.
+    dist = [0.0] * n
+
+    for _ in range(n - 1):
+        atualizado = False
+        for u in range(n):
+            base = dist[u]
+            for v, w in adj[u]:
+                nd = base + w
+                if nd < dist[v]:
+                    dist[v] = nd
+                    atualizado = True
+        if not atualizado:
+            break
+
+    for u in range(n):
+        base = dist[u]
+        for v, w in adj[u]:
+            if base + w < dist[v]:
+                return True
+
+    return False
+
+
+def reconstruir_caminho(pred: list[int], fonte: int, destino: int) -> list[int]:
     caminho = []
     atual = destino
-    
-    while atual is not None:
+
+    while atual != -1:
         caminho.append(atual)
+        if atual == fonte:
+            break
         atual = pred[atual]
-    caminho.reverse()
-    
-    # Verifica se o caminho começa na origem
-    if caminho and caminho[0] == origem:
-        return caminho
-    return []  # Retorna caminho vazio se não for possível alcançar o destino
 
-def obter_caminho_lista(pred, destino):
-    caminho = []
-    atual = destino
-    
-    while atual is not None:
-        caminho.append(atual)
-        atual = pred.get(atual)
+    if not caminho or caminho[-1] != fonte:
+        return []
+
     caminho.reverse()
-    
     return caminho
 
-def escolher_movimento_ladrao(grafo, pos_atual, portos, pos_policiais):
-    
-    vizinhos = grafo.vizinhos(pos_atual)
-    
-    if not vizinhos:
-        return None  # Sem movimentos possíveis
-    
-    # Filtra os vizinhos para evitar os policiais
-    vizinhos_livres = [(v,peso) for v, peso in vizinhos if v not in pos_policiais]
-    
-    if not vizinhos_livres:
-        return None  # Sem movimentos possíveis sem intersectar com policiais
-    
-    melhor_vizinho = None
-    melhor_custo = float('inf')
-    
-    for v, peso in vizinhos_livres:
-        
-        #calcula caminhos a partir do vizinho
-        dist, pred, _ = caminho_minimo_auto(grafo, v)
-        
-        for porto in portos:
-            custo_total = peso + dist[porto]  # Custo do movimento atual + custo do caminho até o porto
-            if custo_total < melhor_custo:
-                melhor_custo = custo_total
-                melhor_vizinho = v
-    return melhor_vizinho if melhor_vizinho is not None else vizinhos_livres[0][0]  # Retorna o melhor vizinho ou o primeiro disponível
+
+def proximo_vertice(pred: list[int], fonte: int, destino: int) -> int | None:
+    caminho = reconstruir_caminho(pred, fonte, destino)
+    if len(caminho) < 2:
+        return None
+    return caminho[1]
+
+
+def bfs_alcancaveis(
+    adj: list[list[tuple[int, float]]],
+    fonte: int,
+) -> set[int]:
+    visitados: set[int] = {fonte}
+    fila = deque([fonte])
+
+    while fila:
+        u = fila.popleft()
+        for v, _ in adj[u]:
+            if v not in visitados:
+                visitados.add(v)
+                fila.append(v)
+
+    return visitados
+
+
+def construir_rede_fluxo(
+    g,
+    castelo: int,
+    portos_alcancaveis: list[int],
+) -> tuple[list[list[int]], int, int]:
+    n_rede = 2 * g.n + 1
+    t_estrela = n_rede - 1
+    cap = [[0] * n_rede for _ in range(n_rede)]
+
+    for v in range(g.n):
+        v_in, v_out = 2 * v, 2 * v + 1
+        cap[v_in][v_out] = CAP_INF if v == castelo else 1
+
+    for u in range(g.n):
+        u_out = 2 * u + 1
+        for v, _ in g.adj[u]:
+            v_in = 2 * v
+            cap[u_out][v_in] = CAP_INF
+
+    for p in portos_alcancaveis:
+        p_out = 2 * p + 1
+        cap[p_out][t_estrela] = CAP_INF
+
+    return cap, n_rede, t_estrela
+
+
+def _bfs_rede_residual(
+    cap: list[list[int]],
+    n: int,
+    fonte: int,
+    sorvedouro: int,
+) -> list[int]:
+    pai = [-1] * n
+    visitado = [False] * n
+    visitado[fonte] = True
+
+    fila = deque([fonte])
+    while fila and not visitado[sorvedouro]:
+        u = fila.popleft()
+        for v in range(n):
+            if not visitado[v] and cap[u][v] > 0:
+                visitado[v] = True
+                pai[v] = u
+                fila.append(v)
+
+    return pai
+
+
+def edmonds_karp(
+    cap: list[list[int]],
+    n: int,
+    fonte: int,
+    sorvedouro: int,
+) -> tuple[int, list[list[int]]]:
+    fluxo_total = 0
+
+    while True:
+        pai = _bfs_rede_residual(cap, n, fonte, sorvedouro)
+        if pai[sorvedouro] == -1:
+            break
+
+        gargalo = CAP_INF
+        v = sorvedouro
+        while v != fonte:
+            u = pai[v]
+            gargalo = min(gargalo, cap[u][v])
+            v = u
+
+        v = sorvedouro
+        while v != fonte:
+            u = pai[v]
+            cap[u][v] -= gargalo
+            cap[v][u] += gargalo
+            v = u
+
+        fluxo_total += gargalo
+
+    return fluxo_total, cap
+
+
+def vertices_do_corte(
+    cap_residual: list[list[int]],
+    n: int,
+    fonte: int,
+    g,
+) -> list[int]:
+    alcancaveis: set[int] = {fonte}
+    fila = deque([fonte])
+
+    while fila:
+        u = fila.popleft()
+        for v in range(n):
+            if v not in alcancaveis and cap_residual[u][v] > 0:
+                alcancaveis.add(v)
+                fila.append(v)
+
+    corte = []
+    for v in range(g.n):
+        v_in, v_out = 2 * v, 2 * v + 1
+        if v_in in alcancaveis and v_out not in alcancaveis:
+            corte.append(v)
+
+    return corte
