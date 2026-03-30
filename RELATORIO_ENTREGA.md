@@ -77,6 +77,7 @@ O mínimo teórico de equipes foi modelado com vertex split e Edmonds-Karp em re
 - [projeto/algoritmos.py](projeto/algoritmos.py)
 - [projeto/simulacao.py](projeto/simulacao.py)
 - [projeto/relatorio.py](projeto/relatorio.py)
+- [projeto/visualizacao.py](projeto/vizualizacao.py)
 
 Separação clara de responsabilidades e baixo acoplamento entre módulos.
 
