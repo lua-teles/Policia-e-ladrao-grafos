@@ -101,3 +101,4 @@ Esses arquivos ajudam a cobrir o requisito de analise para:
 ## Material de entrega
 
 - Checklist e texto-base para relatório final: [RELATORIO_ENTREGA.md](RELATORIO_ENTREGA.md)
+- Link do vídeo com demonstração e explicações: [YouTube](https://youtu.be/NdLLnn5wRmg?si=2IelcKY4VGMBqZ8q)
