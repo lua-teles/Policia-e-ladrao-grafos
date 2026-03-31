@@ -72,12 +72,12 @@ O mínimo teórico de equipes foi modelado com vertex split e Edmonds-Karp em re
 
 ### 3.1 Organização modular
 
-- [projeto/main.py](projeto/main.py)
-- [projeto/grafo.py](projeto/grafo.py)
-- [projeto/algoritmos.py](projeto/algoritmos.py)
-- [projeto/simulacao.py](projeto/simulacao.py)
-- [projeto/relatorio.py](projeto/relatorio.py)
-- [projeto/visualizacao.py](projeto/vizualizacao.py)
+- [./main.py](./main.py)
+- [./grafo.py](./grafo.py)
+- [./algoritmos.py](./algoritmos.py)
+- [./simulacao.py](./simulacao.py)
+- [./relatorio.py](./relatorio.py)
+- [./visualizacao.py](./vizualizacao.py)
 
 Separação clara de responsabilidades e baixo acoplamento entre módulos.
 
@@ -148,7 +148,7 @@ Conclusão: Min-Cut é referência estrutural, enquanto a simulação captura co
 
 ## 6. Referências rápidas
 
-- Documento principal de execução: [projeto/README.md](projeto/README.md)
-- Relatório gerado no caso padrão: [projeto/saida.txt](projeto/saida.txt)
-- Pasta de cenários: [projeto/casos_teste](projeto/casos_teste)
-- Animação gerada no caso padrão: [projeto/animacao.gif](projeto/animacao.gif)
+- Documento principal de execução: [./README.md](./README.md)
+- Relatório gerado no caso padrão: [./saida.txt](./saida.txt)
+- Pasta de cenários: [./casos_teste](./casos_teste)
+- Animação gerada no caso padrão: [./animacao.gif](./animacao.gif)
