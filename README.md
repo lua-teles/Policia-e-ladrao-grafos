@@ -9,7 +9,6 @@ Implementacao em Python 3.10+ da simulação de perseguição em grafo direciona
 - `algoritmos.py`: Bellman-Ford, BFS, Edmonds-Karp e extração de vértices do corte;
 - `simulacao.py`: lógica rodada a rodada;
 - `relatorio.py`: formatação e escrita do relatório final;
-- `visualizacao.py`: geração de animação GIF da simulação;
 - `entrada.txt`: exemplo padrão de entrada;
 - `saida.txt`: saída gerada no exemplo padrão;
 - `animacao.gif`: animação gerada automaticamente ao rodar main.py;
@@ -65,7 +64,6 @@ python main.py entrada.txt saida.txt
 - O grafo reverso permite calcular distâncias para todas as equipes com uma única execução por rodada.
 - O min-cut usa vertex split e Edmonds-Karp com matriz de capacidades.
 - Se a tentativa com as equipes iniciais falhar, o programa tenta reposicionar equipes no corte minimo.
-- A animação GIF é gerada automaticamente a cada execução usando matplotlib e networkx.
 
 ##Dependências
 ```bash
